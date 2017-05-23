@@ -25,7 +25,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/garyburd/redigo/internal"
+	"github.com/mbyczkowski/redigo/internal"
 )
 
 var nowFunc = time.Now // for testing
@@ -187,6 +187,14 @@ func (p *Pool) ActiveCount() int {
 	active := p.active
 	p.mu.Unlock()
 	return active
+}
+
+// IdleCount returns the number of idle connections in the pool.
+func (p *Pool) IdleCount() int {
+	p.mu.Lock()
+	idle := p.idle.Len()
+	p.mu.Unlock()
+	return idle
 }
 
 // Close releases the resources used by the pool.
